@@ -163,7 +163,7 @@ public class LauncherPreferences {
         if (deviceRam < 3064) return 936;
         if (deviceRam < 4096) return 1144;
         if (deviceRam < 6144) return 1536;
-        return 2048; //Default RAM allocation for 64 bits
+        return 2560; // Sharky performance default for devices with 6 GB+ RAM
     }
 
     /// Find a correct resolution for the device
@@ -173,7 +173,8 @@ public class LauncherPreferences {
     private static int findBestResolution(Context context, boolean isDevicePowerful) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int minSide = Math.min(metrics.widthPixels, metrics.heightPixels);
-        int targetSide = isDevicePowerful ? 1080 : 720;
+        // Sharky performance default: render at about 65% on an 800px short-side tablet.
+        int targetSide = isDevicePowerful ? 1080 : 520;
         if (minSide <= targetSide) return 100; // No need to scale down
 
         float ratio = (100f * targetSide / minSide);
