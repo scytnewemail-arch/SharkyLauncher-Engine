@@ -34,8 +34,8 @@ public class MinecraftProfile {
 
 	public static MinecraftProfile getDefaultProfile(){
 		MinecraftProfile defaultProfile = new MinecraftProfile();
-		defaultProfile.name = "Default";
-		defaultProfile.lastVersionId = "1.7.10";
+		defaultProfile.name = "Sharky Max FPS";
+		defaultProfile.lastVersionId = "1.20.1";
 		return defaultProfile;
 	}
 
