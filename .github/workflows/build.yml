@@ -1,0 +1,51 @@
+name: Build Sharky Engine
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout Amethyst with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Replace SSH dependency URL with HTTPS
+        run: |
+          git config --file .gitmodules \
+            submodule.androidnsbypass.url \
+            https://github.com/alexytomi/androidnsbypass.git
+          git submodule sync --recursive
+          git submodule update --init --recursive
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses || true
+
+      - name: Build engine APK
+        run: |
+          chmod +x gradlew
+          ./gradlew :app_pojavlauncher:assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sharky-Engine-debug
+          path: app_pojavlauncher/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
