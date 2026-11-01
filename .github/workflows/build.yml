@@ -37,10 +37,12 @@ jobs:
       - name: Accept Android licenses
         run: yes | sdkmanager --licenses || true
 
-      - name: Build engine APK
+      - name: Build debug APK only
         run: |
           chmod +x gradlew
-          ./gradlew :app_pojavlauncher:assembleDebug
+          ./gradlew :app_pojavlauncher:assembleDebug \
+            -x :app_pojavlauncher:packageRelease \
+            -x :app_pojavlauncher:assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
